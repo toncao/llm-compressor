@@ -132,6 +132,26 @@ _deepseek_mappings = [
     AWQMapping("re:.*up_proj$", ["re:.*down_proj$"]),
 ]
 
+_glm4_moe_mapping = [
+    AWQMapping(
+        r"re:.*input_layernorm$",
+        [r"re:.*q_proj$", r"re:.*k_proj$", r"re:.*v_proj$"],
+    ),
+    AWQMapping(r"re:.*v_proj$", [r"re:.*o_proj$"]),
+
+    # This pattern correctly finds all gate/up projects in dense and MoE layers
+    AWQMapping(
+        r"re:.*post_attention_layernorm$",
+        [r"re:.*mlp\..*gate_proj$", r"re:.*mlp\..*up_proj$"],
+    ),
+
+    # Provide flexible source and target patterns. The library will handle the pairing.
+    AWQMapping(
+        "re:.*up_proj$",
+        ["re:.*down_proj$"],
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "CohereForCausalLM": _cohere_mappings,
     "Cohere2ForCausalLM": _cohere_mappings,
@@ -148,7 +168,8 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Qwen2MoeForCausalLM": _moe_default_mappings,
     "Qwen3ForCausalLM": _default_mappings,
     "Qwen3MoeForCausalLM": _moe_default_mappings,
-}
+    "Glm4MoeForCausalLM": _glm4_moe_mapping,
+    }
 
 
 @dataclass
