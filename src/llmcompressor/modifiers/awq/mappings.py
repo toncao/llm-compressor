@@ -132,27 +132,19 @@ _deepseek_mappings = [
     AWQMapping("re:.*up_proj$", ["re:.*down_proj$"]),
 ]
 
-_glm4_moe_mapping = [
-    AWQMapping(
-        r"re:.*input_layernorm$",
-        [r"re:.*q_proj$", r"re:.*k_proj$", r"re:.*v_proj$"],
-    ),
-    AWQMapping(r"re:.*v_proj$", [r"re:.*o_proj$"]),
-
-    # This pattern correctly finds all gate/up projects in dense and MoE layers
-    AWQMapping(
-        r"re:.*post_attention_layernorm$",
-        [r"re:.*mlp\..*gate_proj$", r"re:.*mlp\..*up_proj$"],
-    ),
-
-    # Provide flexible source and target patterns. The library will handle the pairing.
-    AWQMapping(
-        "re:.*up_proj$",
-        ["re:.*down_proj$"],
-    ),
+_bloom_mappings = [
+    AWQMapping("re:.*input_layernorm$", ["re:.*query_key_value$"]),
+    AWQMapping("re:.*post_attention_layernorm$", ["re:.*dense_h_to_4h$"]),
+    AWQMapping("re:.*gelu_impl$", ["re:.*dense_4h_to_h$"]),
+    # Note: AutoAWQ excludes this mapping, based on researcher's post in
+    # https://github.com/mit-han-lab/llm-awq/issues/2#issuecomment-1606297469
+    # AWQMapping(
+    #     "re:.*query_key_value$",
+    #     ["re:.*dense$"]
+    # ),
 ]
-
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
+    "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
     "Cohere2ForCausalLM": _cohere_mappings,
     "DeepseekV3ForCausalLM": _deepseek_mappings,
