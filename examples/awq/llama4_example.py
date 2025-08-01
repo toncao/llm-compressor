@@ -4,10 +4,10 @@ from transformers import Llama4ForConditionalGeneration, Llama4Processor
 
 from llmcompressor import oneshot
 from llmcompressor.modeling import replace_modules_for_calibration
-from llmcompressor.modifiers.quantization import GPTQModifier
+from llmcompressor.modifiers.awq import AWQModifier
 
 # Select model and load it.
-model_id = "deepcogito/cogito-v2-preview-llama-109B-MoE"
+model_id = "/mnt/LinuxDrive_1/huggingface/hub/cogito-v2-preview-llama-109B-MoE"
 model = Llama4ForConditionalGeneration.from_pretrained(model_id, torch_dtype="auto")
 processor = Llama4Processor.from_pretrained(model_id)
 # We update `Llama4TextMoe` modules with custom `SequentialLlama4TextMoe`.
@@ -18,7 +18,7 @@ model = replace_modules_for_calibration(model)
 
 DATASET_ID = "neuralmagic/calibration"
 NUM_CALIBRATION_SAMPLES = 256
-MAX_SEQUENCE_LENGTH = 1024
+MAX_SEQUENCE_LENGTH = 8192
 
 ds = load_dataset(DATASET_ID, name="LLM", split="train").shuffle(seed=42).select(range(NUM_CALIBRATION_SAMPLES))
 
@@ -60,7 +60,7 @@ def data_collator(batch):
 
 
 # Configure the quantization algorithm to run.
-recipe = GPTQModifier(
+recipe = AWQModifier(
     targets="Linear",
     scheme="W4A16",
     ignore=[
@@ -87,6 +87,6 @@ oneshot(
 )
 
 # Save to disk compressed.
-SAVE_DIR = "./cogito-v2-preview-llama-109B-MoE" + "-W4A16-G128"
+SAVE_DIR = "/mnt/LinuxDrive_1/huggingface/hub/cogito-v2-preview-llama-109B-MoE" + "-AWQ"
 model.save_pretrained(SAVE_DIR, save_compressed=True)
 processor.save_pretrained(SAVE_DIR)
