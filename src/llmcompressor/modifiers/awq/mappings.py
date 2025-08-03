@@ -160,7 +160,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Qwen2MoeForCausalLM": _moe_default_mappings,
     "Qwen3ForCausalLM": _default_mappings,
     "Qwen3MoeForCausalLM": _moe_default_mappings,
-    "Glm4MoeForCausalLM": _glm4_moe_mapping,
+    "Glm4MoeForCausalLM": _default_mappings,
     }
 
 
