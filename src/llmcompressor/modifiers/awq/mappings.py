@@ -143,6 +143,23 @@ _bloom_mappings = [
     #     ["re:.*dense$"]
     # ),
 ]
+
+_smallthinkert_mappings = [
+    AWQMapping(
+        "re:.*input_layernorm$",
+        ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
+    ),
+    AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
+    AWQMapping(
+        "re:.*post_attention_layernorm$",
+        ["re:.*gate$", "re:.*up$"],
+    ),
+    AWQMapping(
+        "re:.*up$",
+        ["re:.*down$"],
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -163,6 +180,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Glm4MoeForCausalLM": _default_mappings,
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
+    "SmallThinkerForCausalLM": _smallthinkert_mappings
     }
 
 
