@@ -144,7 +144,7 @@ _bloom_mappings = [
     # ),
 ]
 
-_smallthinkert_mappings = [
+_smallthinker_mappings = [
     AWQMapping(
         "re:.*input_layernorm$",
         ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
@@ -180,7 +180,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Glm4MoeForCausalLM": _default_mappings,
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
-    "SmallThinkerForCausalLM": _smallthinkert_mappings
+    "SmallThinkerForCausalLM": _smallthinker_mappings
     }
 
 
