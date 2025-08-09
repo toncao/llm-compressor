@@ -168,7 +168,7 @@ _gpt_oss_mappings = [
     AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
     AWQMapping(
         "re:.*post_attention_layernorm$",
-        ["re:.*gate_up_proj.*",],
+        ["re:.*gate_up_proj.*"],
     ),
     AWQMapping(
         "re:.*gate_up_proj.*", 
