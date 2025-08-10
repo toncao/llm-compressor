@@ -197,7 +197,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
     "SmallThinkerForCausalLM": _smallthinker_mappings,
-    "GptOssForCausalLM": _gpt_oss_mappings
+    "GptOssForCausalLM": _default_mappings
     }
 
 
