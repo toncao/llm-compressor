@@ -89,6 +89,7 @@ MAPPINGS_REGISTRY: Dict[str, List[LayerMap]] = {
     "WhisperForConditionalGeneration": WHISPER_V2_SMOOTHQUANT_MAPPINGS,
     "DeepseekV2ForCausalLM": DEEPSEEK_V2_SMOOTHQUANT_MAPPINGS,
     "Glm4vForConditionalGeneration": FUSED_SMOOTHQUANT_MAPPINGS,
+    "Glm4vMoeForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS
 }
 
 

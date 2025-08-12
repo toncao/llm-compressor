@@ -199,6 +199,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "SmallThinkerForCausalLM": _smallthinker_mappings,
     "GptOssForCausalLM": _fused_mappings,
     "Glm4vForConditionalGeneration": _fused_mappings,
+    "Glm4vMoeForConditionalGeneration": _default_mappings,
     }
 
 
