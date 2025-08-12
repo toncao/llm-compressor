@@ -59,14 +59,22 @@ WHISPER_V2_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
         smooth_layers="re:.*final_layer_norm",
     ),
 ]
-
 DEEPSEEK_V2_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
     LayerMap(
         balance_layers=["re:.*q_proj", "re:.*kv_a_proj_with_mqa"],
         smooth_layers="re:.*input_layernorm",
     ),
 ]
-
+FUSED_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
+    LayerMap(
+        balance_layers=["re:.*q_proj", "re:.*k_proj", "re:.*v_proj"],
+        smooth_layers="re:.*input_layernorm",
+    ),
+    LayerMap(
+        balance_layers=["re:.*gate_up_proj"],
+        smooth_layers="re:.*post_attention_layernorm",
+    ),
+]
 
 # Registry of layer mappings for different architectures
 #   Add more mappings here
@@ -80,6 +88,7 @@ MAPPINGS_REGISTRY: Dict[str, List[LayerMap]] = {
     "Phi3VForCausalLM": PHI3_VISION_SMOOTHQUANT_MAPPINGS,
     "WhisperForConditionalGeneration": WHISPER_V2_SMOOTHQUANT_MAPPINGS,
     "DeepseekV2ForCausalLM": DEEPSEEK_V2_SMOOTHQUANT_MAPPINGS,
+    "Glm4vForConditionalGeneration": FUSED_SMOOTHQUANT_MAPPINGS,
 }
 
 

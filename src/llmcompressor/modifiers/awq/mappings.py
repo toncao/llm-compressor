@@ -160,7 +160,7 @@ _smallthinker_mappings = [
     ),
 ]
 
-_gpt_oss_mappings = [
+_fused_mappings = [
     AWQMapping(
         "re:.*input_layernorm$",
         ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
@@ -171,8 +171,8 @@ _gpt_oss_mappings = [
         ["re:.*gate_up_proj.*"],
     ),
     AWQMapping(
-        "re:.*gate_up_proj.*", 
-        ["re:.*down_proj.*"],
+        "re:.*gate_up_proj$", 
+        ["re:.*down_proj$"],
     ),
 ]
 
@@ -197,7 +197,8 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
     "SmallThinkerForCausalLM": _smallthinker_mappings,
-    "GptOssForCausalLM": _default_mappings
+    "GptOssForCausalLM": _fused_mappings,
+    "Glm4vForConditionalGeneration": _fused_mappings,
     }
 
 
