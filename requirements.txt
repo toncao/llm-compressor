@@ -1,5 +1,5 @@
 absl-py==2.3.1
-accelerate==1.10.0
+accelerate==1.9.0
 aiohappyeyeballs==2.6.1
 aiohttp==3.12.15
 aiosignal==1.4.0

@@ -75,6 +75,12 @@ FUSED_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
         smooth_layers="re:.*post_attention_layernorm",
     ),
 ]
+COHERE_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
+    LayerMap(
+        balance_layers=["re:.*q_proj", "re:.*k_proj", "re:.*v_proj", "re:.*mlp.gate_proj$", "re:.*mlp.up_proj$"],
+        smooth_layers="re:.*input_layernorm",
+    ),
+]
 
 # Registry of layer mappings for different architectures
 #   Add more mappings here
@@ -89,7 +95,9 @@ MAPPINGS_REGISTRY: Dict[str, List[LayerMap]] = {
     "WhisperForConditionalGeneration": WHISPER_V2_SMOOTHQUANT_MAPPINGS,
     "DeepseekV2ForCausalLM": DEEPSEEK_V2_SMOOTHQUANT_MAPPINGS,
     "Glm4vForConditionalGeneration": FUSED_SMOOTHQUANT_MAPPINGS,
-    "Glm4vMoeForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS
+    "Glm4vMoeForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
+    "Cohere2VisionForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
+    "GptOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS,
 }
 
 

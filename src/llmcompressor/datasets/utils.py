@@ -59,10 +59,11 @@ def get_processed_dataset(
     for split_name, split_str in splits.items():
         dataset = dataset_args.dataset
         if hasattr(dataset, "column_names") and "input_ids" in dataset.column_names:
-            # dataset is already tokenized
+            logger.info("dataset is already tokenized")
+
             tokenized_datasets[split_name] = dataset
         else:
-            # dataset needs to be tokenized
+            logger.info("dataset needs to be tokenized")
             dataset_manager = TextGenerationDataset.load_from_registry(
                 registry_id,
                 dataset_args=dataset_args,
