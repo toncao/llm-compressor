@@ -3,6 +3,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from llmcompressor import oneshot
 from llmcompressor.modifiers.awq import AWQModifier
+from llmcompressor.utils import dispatch_for_generation
 
 # Select model and load it.
 MODEL_ID = "Kwaipilot/KAT-V1-40B"
