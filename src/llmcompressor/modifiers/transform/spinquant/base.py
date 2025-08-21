@@ -171,14 +171,14 @@ class SpinQuantModifier(Modifier, use_enum_values=True):
         for _, embedding in match_named_modules(
             model, [self.mappings.embedding], warn_on_fail=True
         ):
-            center_embeddings(embedding)
+            center_embeddings(embedding, self.precision)
 
     def _fuse_norms(self, model: PreTrainedModel):
         for mapping in self.norm_mappings:
             for norm, *linears in match_modules_set(
                 model, (mapping.norm, *mapping.linears)
             ):
-                fuse_norm_linears(norm, linears)
+                fuse_norm_linears(norm, linears, self.precision)
 
     def _create_r1_scheme(self) -> TransformScheme:
         return TransformScheme(

@@ -13,7 +13,7 @@ __all__ = ["center_embeddings", "fuse_norm_linears"]
 PRECISION = torch.float64
 
 
-def center_embeddings(embedding: torch.nn.Module):
+def center_embeddings(embedding: torch.nn.Module, precision: torch.dtype = PRECISION):
     """
     Shift each embedding to have a mean of zero
 
@@ -24,14 +24,14 @@ def center_embeddings(embedding: torch.nn.Module):
 
     with align_module_device(embedding):
         weight_dtype = embedding.weight.dtype
-        weight = embedding.weight.to(PRECISION)
+        weight = embedding.weight.to(precision)
         new_weight = weight - weight.mean(dim=-1, keepdim=True)
         new_weight = new_weight.to(weight_dtype)
 
     update_offload_parameter(embedding, "weight", new_weight)
 
 
-def fuse_norm_linears(norm: torch.nn.Module, linears: Iterable[torch.nn.Linear]):
+def fuse_norm_linears(norm: torch.nn.Module, linears: Iterable[torch.nn.Linear], precision: torch.dtype = PRECISION):
     """
     Fuse the scaling operation of norm layer into subsequent linear layers.
     This useful for ensuring transform invariance between norm and linear layers.
@@ -51,9 +51,8 @@ def fuse_norm_linears(norm: torch.nn.Module, linears: Iterable[torch.nn.Linear])
             linear, exec_device
         ):
             weight_dtype = linear.weight.dtype
-            new_weight = linear.weight.to(PRECISION) * norm.weight.to(PRECISION)
+            new_weight = linear.weight.to(precision) * norm.weight.to(precision)
             new_weight = new_weight.to(weight_dtype)
-
         update_offload_parameter(linear, "weight", new_weight)
 
     new_norm_weight = torch.ones_like(norm.weight, device="cpu")

@@ -200,6 +200,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "GptOssForCausalLM": _default_mappings,
     "Glm4vForConditionalGeneration": _fused_mappings,
     "Glm4vMoeForConditionalGeneration": _default_mappings,
+    "SeedOssForCausalLM": _default_mappings,
     }
 
 

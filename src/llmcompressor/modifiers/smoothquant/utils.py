@@ -98,6 +98,7 @@ MAPPINGS_REGISTRY: Dict[str, List[LayerMap]] = {
     "Glm4vMoeForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
     "Cohere2VisionForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
     "GptOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS,
+    "SeedOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS
 }
 
 

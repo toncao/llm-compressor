@@ -95,7 +95,7 @@ def infer_and_set_per_module_quantization_format(
             )
 
             # If set, we check if it matches our inferred one
-            if submodule.quantization_scheme.format is not None:
+            if getattr(submodule.quantization_scheme, "format", None) is not None:
                 # If it does not, warn the user
                 if submodule.quantization_scheme.format != compression_format.value:
                     logger.warning(
@@ -103,8 +103,8 @@ def infer_and_set_per_module_quantization_format(
                         "inferred format. Compression may fail "
                     )
             else:
-                # If not set, we set ours
-                submodule.quantization_scheme.format = compression_format.value
+                submodule.quantization_scheme.__dict__["format"] = compression_format.value
+                #setattr(submodule.quantization_scheme, "format", compression_format.value)
 
             if submodule.quantization_scheme.format not in unique_formats:
                 unique_formats.append(submodule.quantization_scheme.format)
