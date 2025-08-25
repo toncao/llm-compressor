@@ -79,20 +79,42 @@ def update_fused_layer_weight_global_scales(submodule: torch.nn.Module):
         del global_scale
 
     if _is_mlp_module(submodule):
-        if not _valid_tensor_group_quant([submodule.gate_proj, submodule.up_proj]):
+        if not hasattr(submodule, "gate_proj"):
+            if not _valid_tensor_group_quant([submodule.up_proj]):
+                return
+            
+            global_scale = torch.min(submodule.up_proj.weight_global_scale.data).reshape([1])
+            update_parameter_data(submodule.up_proj, global_scale, "weight_global_scale")
+            
+            del global_scale
             return
 
-        with align_modules([submodule.gate_proj, submodule.up_proj]):
-            global_scale = torch.min(
-                torch.cat(
-                    (
-                        submodule.gate_proj.weight_global_scale.data,
-                        submodule.up_proj.weight_global_scale.data,
+        if not hasattr(submodule, "up_proj"):
+            if not _valid_tensor_group_quant([submodule.gate_proj]):
+                return
+            
+            global_scale = torch.min(submodule.gate_proj.weight_global_scale.data).reshape([1])
+            update_parameter_data(submodule.gate_proj, global_scale, "weight_global_scale")
+            
+            del global_scale
+            return
+        
+        if hasattr(submodule, "gate_proj") and hasattr(submodule, "up_proj"):
+            if not _valid_tensor_group_quant([submodule.gate_proj, submodule.up_proj]):
+                return
+
+            with align_modules([submodule.gate_proj, submodule.up_proj]):
+                global_scale = torch.min(
+                    torch.cat(
+                        (
+                            submodule.gate_proj.weight_global_scale.data,
+                            submodule.up_proj.weight_global_scale.data,
+                        )
                     )
-                )
-            ).reshape([1])
+                ).reshape([1])
 
-        update_parameter_data(submodule.gate_proj, global_scale, "weight_global_scale")
-        update_parameter_data(submodule.up_proj, global_scale, "weight_global_scale")
+            update_parameter_data(submodule.gate_proj, global_scale, "weight_global_scale")
+            update_parameter_data(submodule.up_proj, global_scale, "weight_global_scale")
 
-        del global_scale
+            del global_scale
+            return
