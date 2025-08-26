@@ -996,7 +996,12 @@ class DisableKVCache:
             model.config.text_config, "use_cache"
         ):
             self.config = model.config.text_config
-
+            
+        # InternVL config
+        elif hasattr(model.config, "llm_config") and hasattr(
+            model.config.llm_config, "use_cache"
+        ):
+            self.config = model.config.llm_config
         # unknown config structure
         else:
             raise NotImplementedError(f"Cannot find `use_cache` for {model.config}")
