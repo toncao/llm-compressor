@@ -81,6 +81,18 @@ COHERE_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
         smooth_layers="re:.*input_layernorm",
     ),
 ]
+NEMOTRON_H_SMOOTHQUANT_MAPPINGS: List[LayerMap] = [
+    LayerMap(
+        balance_layers=[
+            "re:.*q_proj", 
+            "re:.*k_proj", 
+            "re:.*v_proj",
+            "re:.*up_proj",
+            "re:.*in_proj",
+        ],
+        smooth_layers="re:.*norm",
+    ),
+]
 
 # Registry of layer mappings for different architectures
 #   Add more mappings here
@@ -98,7 +110,8 @@ MAPPINGS_REGISTRY: Dict[str, List[LayerMap]] = {
     "Glm4vMoeForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
     "Cohere2VisionForConditionalGeneration": DEFAULT_SMOOTHQUANT_MAPPINGS,
     "GptOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS,
-    "SeedOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS
+    "SeedOssForCausalLM": DEFAULT_SMOOTHQUANT_MAPPINGS,
+    "NemotronHForCausalLM": NEMOTRON_H_SMOOTHQUANT_MAPPINGS,
 }
 
 

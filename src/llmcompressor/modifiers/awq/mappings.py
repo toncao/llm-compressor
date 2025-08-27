@@ -176,6 +176,29 @@ _fused_mappings = [
     ),
 ]
 
+nemotron_h_mappings = [
+    AWQMapping(
+        smooth_layer="re:.*norm$",
+        balance_layers=[
+            "re:.*q_proj$", 
+            "re:.*k_proj$", 
+            "re:.*v_proj$",
+            "re:.*up_proj$",
+            "re:.*in_proj$",
+        ],
+    ),
+    
+    AWQMapping(
+        smooth_layer="re:.*v_proj$", 
+        balance_layers=["re:.*o_proj$"]
+    ),
+    
+    AWQMapping(
+        smooth_layer="re:.*up_proj$", 
+        balance_layers=["re:.*down_proj$"]
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -201,6 +224,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Glm4vForConditionalGeneration": _fused_mappings,
     "Glm4vMoeForConditionalGeneration": _default_mappings,
     "SeedOssForCausalLM": _default_mappings,
+    "NemotronHForCausalLM": nemotron_h_mappings,
     }
 
 
