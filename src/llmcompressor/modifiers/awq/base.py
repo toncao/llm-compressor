@@ -397,7 +397,7 @@ class AWQModifier(Modifier, QuantizationMixin):
             ):
                 self._smooth_activation_means[smooth_name] = _accumulate_mean(
                     # Assume that first argument is the input
-                    args[0].cpu().detach().squeeze(),
+                    args[0].cpu().abs().detach().squeeze(),
                     self._smooth_activation_means.get(smooth_name, None),
                 )
 
@@ -742,7 +742,7 @@ def _accumulate_mean(
     sum_added = inp.sum(dim=0)
     num_added = inp.size(0)
     if prev_mean_and_count is None:
-        return sum_added, num_added
+        return sum_added / num_added, num_added
 
     prev_mean, prev_count = prev_mean_and_count
 

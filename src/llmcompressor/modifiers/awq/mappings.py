@@ -199,6 +199,22 @@ nemotron_h_mappings = [
     ),
 ]
 
+apertus_mappings = [
+    AWQMapping(
+        "re:.*attention_layernorm$",
+        ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
+    ),
+    AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
+    AWQMapping(
+        "re:.*feedforward_layernorm$",
+        ["re:.*up_proj$"],
+    ),
+    AWQMapping(
+        "re:.*up_proj$",
+        ["re:.*down_proj$"],
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -225,6 +241,8 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Glm4vMoeForConditionalGeneration": _default_mappings,
     "SeedOssForCausalLM": _default_mappings,
     "NemotronHForCausalLM": nemotron_h_mappings,
+    "Ernie4_5_MoeForCausalLM": _default_mappings,
+    "ApertusForCausalLM": apertus_mappings
     }
 
 
