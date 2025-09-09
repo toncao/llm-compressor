@@ -22,8 +22,7 @@ codecarbon==3.0.4
 colorama==0.4.6
 coloredlogs==15.0.1
 colorlog==6.9.0
--e git+https://github.com/toncao/compressed-tensors.git@a439ffb85575f3d55cfee0881ba25b4f09937624#egg=compressed_tensors
-cookiecutter==1.7.3
+compressed-tensors==0.11.0
 cryptography==45.0.6
 csvw==3.5.1
 cuda-bindings==12.9.1
@@ -201,8 +200,7 @@ torch==2.8.0
 torchaudio==2.8.0
 torchvision==0.23.0
 tqdm==4.67.1
-transformers @ git+https://github.com/huggingface/transformers.git@8d19231bca9438b70754aacea0badd85d9c6bcb7
-typer==0.16.0
+transformers==4.56.0
 types-python-dateutil==2.9.0.20250809
 typing-inspection==0.4.1
 typing_extensions==4.12.2
