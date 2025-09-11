@@ -174,7 +174,7 @@ class DatasetArguments(CustomDatasetArguments):
     )
     # --- pipeline arguments --- #
     pipeline: Optional[str] = field(
-        default="independent",
+        default="sequential",
         metadata={
             "help": "Calibration pipeline used to calibrate model"
             "Options: ['basic', 'datafree', 'sequential', 'layer_sequential', "
@@ -184,8 +184,6 @@ class DatasetArguments(CustomDatasetArguments):
     tracing_ignore: List[str] = field(
         default_factory=lambda: [
             "_update_causal_mask",
-            "_update_mamba_mask",
-            "_get_mamba_mask",
             "create_causal_mask",
             "make_causal_mask",
             "get_causal_mask",
