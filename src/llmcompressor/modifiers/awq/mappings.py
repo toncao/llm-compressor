@@ -215,6 +215,45 @@ apertus_mappings = [
     ),
 ]
 
+qwen3_next_mapping = [
+    AWQMapping(
+        # Smooth the output of the first layernorm in the decoder block
+        smooth_layer="re:.*input_layernorm$",
+        # Balance the weights of the linear layers that consume this output
+        balance_layers=[
+            # For full_attention layers
+            "re:.*self_attn[.]q_proj$",
+            "re:.*self_attn[.]k_proj$",
+            "re:.*self_attn[.]v_proj$",
+            # For linear_attention layers
+            "re:.*linear_attn[.]in_proj_qkvz$",
+            "re:.*linear_attn[.]in_proj_ba$",
+        ],
+    ),
+    AWQMapping(
+        # Smooth the output of v_proj within the full_attention block
+        smooth_layer="re:.*self_attn[.]v_proj$",
+        # Balance the weights of the output projection
+        balance_layers=["re:.*self_attn[.]o_proj$"],
+    ),
+    AWQMapping(
+        # Smooth the output of the second layernorm in the decoder block
+        smooth_layer="re:.*post_attention_layernorm$",
+        # Balance the weights of the MLP/MoE layers that consume this output
+        balance_layers=[
+            # For standard MLPs and MoE experts
+            "re:.*gate_proj$",
+            "re:.*up_proj$",
+        ],
+    ),
+    AWQMapping(
+        # Smooth the output of up_proj within all MLP/MoE blocks
+        smooth_layer="re:.*up_proj$",
+        # Balance the weights of the down projection
+        balance_layers=["re:.*down_proj$"],
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -242,7 +281,8 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "SeedOssForCausalLM": _default_mappings,
     "NemotronHForCausalLM": nemotron_h_mappings,
     "Ernie4_5_MoeForCausalLM": _default_mappings,
-    "ApertusForCausalLM": apertus_mappings
+    "ApertusForCausalLM": apertus_mappings,
+    "Qwen3NextForCausalLM": qwen3_next_mapping
     }
 
 
