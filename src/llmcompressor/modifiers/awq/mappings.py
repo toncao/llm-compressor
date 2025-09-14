@@ -193,54 +193,35 @@ apertus_mappings = [
 ]
 
 qwen3_next_mapping = [
-    # Input normalization -> Attention/Linear attention inputs
     AWQMapping(
-        smooth_layer="re:.*layers\.\d+\.input_layernorm",
+        smooth_layer="re:.*input_layernorm$",
         balance_layers=[
-            "re:.*layers\.\d+\.self_attn\.q_proj",
-            "re:.*layers\.\d+\.self_attn\.k_proj", 
-            "re:.*layers\.\d+\.self_attn\.v_proj"
-        ]
+            "re:.*self_attn[.]q_proj$",
+            "re:.*self_attn[.]k_proj$",
+            "re:.*self_attn[.]v_proj$",
+            "re:.*linear_attn[.]in_proj_qkvz$",
+            "re:.*linear_attn[.]in_proj_ba$",
+        ],
     ),
     AWQMapping(
-        smooth_layer="re:.*layers\.\d+\.input_layernorm",
+        smooth_layer="re:.*self_attn[.]v_proj$",
+        balance_layers=["re:.*self_attn[.]o_proj$"],
+    ),
+    AWQMapping(
+        smooth_layer="re:.*post_attention_layernorm$",
         balance_layers=[
-            "re:.*layers\.\d+\.linear_attn\.in_proj_qkvz",
-            "re:.*layers\.\d+\.linear_attn\.in_proj_ba"
-        ]
+            "re:.*gate_proj$",
+            "re:.*up_proj$",
+        ],
     ),
-    
-    # V projection -> O projection (attention layers)
-    AWQMapping(
-        smooth_layer="re:.*v_proj$",
-        balance_layers=["re:.*o_proj$"]
-    ),
-    
-    # Post-attention normalization -> MLP inputs
-    AWQMapping(
-        smooth_layer="re:.*layers\.\d+\.post_attention_layernorm",
-        balance_layers=[
-            "re:.*layers\.\d+\.mlp\.gate_proj",
-            "re:.*layers\.\d+\.mlp\.up_proj"
-        ]
-    ),
-    
-    # MoE expert layers (when present)
-    AWQMapping(
-        smooth_layer="re:.*layers\.\d+\.post_attention_layernorm",
-        balance_layers=[
-            "re:.*layers\.\d+\.mlp\.experts\.\d+\.gate_proj",
-            "re:.*layers\.\d+\.mlp\.experts\.\d+\.up_proj",
-            "re:.*layers\.\d+\.mlp\.shared_expert\.gate_proj",
-            "re:.*layers\.\d+\.mlp\.shared_expert\.up_proj"
-        ]
-    ),
-    
-    # Up projection -> Down projection (MLP layers)
     AWQMapping(
         smooth_layer="re:.*up_proj$",
-        balance_layers=["re:.*down_proj$"]
-    )
+        balance_layers=["re:.*down_proj$"],
+    ),
+    AWQMapping(
+        smooth_layer="re:.*linear_attn[.]norm$",
+        balance_layers=["re:.*linear_attn[.]out_proj$"],
+    ),
 ]
 
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
