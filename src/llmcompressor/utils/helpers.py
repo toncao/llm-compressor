@@ -994,34 +994,8 @@ def disable_cache(module: torch.nn.Module):
         with patch_attr(config, "use_cache", False):
             yield
 
-<<<<<<< HEAD
-        # MllamaConfig
-        elif hasattr(model.config, "text_config") and hasattr(
-            model.config.text_config, "use_cache"
-        ):
-            self.config = model.config.text_config
-            
-        # InternVL config
-        elif hasattr(model.config, "llm_config") and hasattr(
-            model.config.llm_config, "use_cache"
-        ):
-            self.config = model.config.llm_config
-        # unknown config structure
-        else:
-            raise NotImplementedError(f"Cannot find `use_cache` for {model.config}")
-
-        self.restore_value = self.config.use_cache
-
-    def __enter__(self):
-        self.restore_value = self.config.use_cache
-        self.config.use_cache = False
-
-    def __exit__(self, _exc_type, _exc_val, _exc_tb):
-        self.config.use_cache = self.restore_value
-=======
     else:
         yield
->>>>>>> upstream/main
 
 
 @contextlib.contextmanager

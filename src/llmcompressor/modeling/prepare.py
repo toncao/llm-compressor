@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-import contextlib
-
 import tqdm
-from accelerate.big_modeling import attach_align_device_hook_on_blocks
-from accelerate.hooks import AlignDevicesHook, named_module_tensors
-=======
-import tqdm
->>>>>>> upstream/main
 from compressed_tensors.utils import replace_module
 from compressed_tensors.utils.offload import offload_to_weights_map
 from transformers import PreTrainedModel
@@ -27,17 +19,11 @@ replacements = {
 }
 
 
-<<<<<<< HEAD
-def replace_modules_for_calibration(model: PreTrainedModel) -> PreTrainedModel:
-    modules = list(model.named_modules())
-    for name, module in tqdm.tqdm(modules, desc="Converting modules"):
-=======
 def replace_modules_for_calibration(
     model: PreTrainedModel,
     calibrate_all_experts: bool = True,
 ) -> PreTrainedModel:
     for name, module in tqdm.tqdm(list(model.named_modules())):
->>>>>>> upstream/main
         cls_name = module.__class__.__name__
         if cls_name in replacements:
             new_module = replacements[cls_name](
@@ -53,14 +39,8 @@ def replace_modules_for_calibration(
 # ------------------- module replacements; during calibration --------------------
 
 
-<<<<<<< HEAD
-def update_qwen3_moe(model: PreTrainedModel, stack):
-    modules = list(model.modules())
-    for module in tqdm.tqdm(modules, desc="Converting modules"):
-=======
 def update_qwen3_moe(model, stack, calibrate_all_experts):
     for module in model.modules():
->>>>>>> upstream/main
         cls_name = module.__class__.__name__
         if cls_name == "Qwen3MoeDecoderLayer":
             # Optionally update the model.config to pass in other arguments
@@ -116,40 +96,4 @@ def moe_calibration_context(
     # Once the context exists, parameter updates persist
     cls_name = model.__class__.__name__
     if cls_name in moe_context:
-<<<<<<< HEAD
-        moe_context.get(cls_name)(model, stack)
-
-
-def replace_offload_module(base, name: str, hook: AlignDevicesHook, module):
-    delattr(base, name)
-
-    assert hook.offload
-    assert hook.weights_map is not None
-
-    # offload parameters to weights map
-    offload_device = "cpu"
-    for param_name, param in named_module_tensors(
-        module, include_buffers=hook.offload_buffers, recurse=True
-    ):
-        offloaded = param.to(offload_device)
-        if hook.tied_params_map is not None:
-            hook.tied_params_map[offloaded.data_ptr()] = {}  # (1)
-        offload_to_weights_map(hook.weights_map, param_name, offloaded)
-
-    # attach hooks and offload weights
-    attach_align_device_hook_on_blocks(
-        module,
-        hook.execution_device,
-        hook.offload,
-        hook.weights_map,
-        hook.offload_buffers,
-        "",
-        hook.skip_keys,
-        None,
-        hook.tied_params_map,
-    )
-
-    base.register_module(name, module)
-=======
         moe_context.get(cls_name)(model, stack, calibrate_all_experts)
->>>>>>> upstream/main

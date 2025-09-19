@@ -33,18 +33,6 @@ class SequentialLlama4TextMoe(torch.nn.Module):
 
     def forward(self, hidden_states: torch.Tensor) -> Tuple[torch.Tensor, torch.tensor]:
         hidden_states = hidden_states.reshape(-1, self.hidden_dim)
-<<<<<<< HEAD
-        router_scores, router_logits = self.router(hidden_states)
-
-        router_top_value, router_indices = torch.topk(router_logits, self.top_k, dim=1)
-
-        router_scores = (
-            torch.full_like(router_logits, float("-inf"))
-            .scatter_(1, router_indices, router_top_value)
-            .transpose(0, 1)
-        )
-        router_scores = torch.sigmoid(router_scores.float()).to(hidden_states.dtype)
-=======
         router_outputs = self.router(hidden_states)
 
         # support transformers 4.53 and greater
@@ -61,7 +49,6 @@ class SequentialLlama4TextMoe(torch.nn.Module):
                 .transpose(0, 1)
             )
             router_scores = torch.sigmoid(router_scores.float()).to(hidden_states.dtype)
->>>>>>> upstream/main
 
         out = self.shared_expert(hidden_states)
         for expert_index in range(self.num_experts):
