@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 import contextlib
 
 import tqdm
 from accelerate.big_modeling import attach_align_device_hook_on_blocks
 from accelerate.hooks import AlignDevicesHook, named_module_tensors
+=======
+import tqdm
+>>>>>>> upstream/main
 from compressed_tensors.utils import replace_module
 from compressed_tensors.utils.offload import offload_to_weights_map
 from transformers import PreTrainedModel
@@ -23,12 +27,24 @@ replacements = {
 }
 
 
+<<<<<<< HEAD
 def replace_modules_for_calibration(model: PreTrainedModel) -> PreTrainedModel:
     modules = list(model.named_modules())
     for name, module in tqdm.tqdm(modules, desc="Converting modules"):
+=======
+def replace_modules_for_calibration(
+    model: PreTrainedModel,
+    calibrate_all_experts: bool = True,
+) -> PreTrainedModel:
+    for name, module in tqdm.tqdm(list(model.named_modules())):
+>>>>>>> upstream/main
         cls_name = module.__class__.__name__
         if cls_name in replacements:
-            new_module = replacements[cls_name](config=model.config, module=module)
+            new_module = replacements[cls_name](
+                config=model.config,
+                module=module,
+                calibrate_all_experts=calibrate_all_experts,
+            )
             replace_module(model, name, new_module)
 
     return model
@@ -37,9 +53,14 @@ def replace_modules_for_calibration(model: PreTrainedModel) -> PreTrainedModel:
 # ------------------- module replacements; during calibration --------------------
 
 
+<<<<<<< HEAD
 def update_qwen3_moe(model: PreTrainedModel, stack):
     modules = list(model.modules())
     for module in tqdm.tqdm(modules, desc="Converting modules"):
+=======
+def update_qwen3_moe(model, stack, calibrate_all_experts):
+    for module in model.modules():
+>>>>>>> upstream/main
         cls_name = module.__class__.__name__
         if cls_name == "Qwen3MoeDecoderLayer":
             # Optionally update the model.config to pass in other arguments
@@ -47,7 +68,11 @@ def update_qwen3_moe(model: PreTrainedModel, stack):
                 patch_attr(
                     module,
                     "mlp",
-                    replace_Qwen3MoE(config=model.config, module=module.mlp),
+                    replace_Qwen3MoE(
+                        config=model.config,
+                        module=module.mlp,
+                        calibrate_all_experts=calibrate_all_experts,
+                    ),
                 )
             )
 
@@ -82,11 +107,16 @@ moe_context = {
 }
 
 
-def moe_calibration_context(model: PreTrainedModel, stack):
+def moe_calibration_context(
+    model: PreTrainedModel,
+    stack,
+    calibrate_all_experts: bool = False,
+):
     # Temporarily updates the MoE modules within the context
     # Once the context exists, parameter updates persist
     cls_name = model.__class__.__name__
     if cls_name in moe_context:
+<<<<<<< HEAD
         moe_context.get(cls_name)(model, stack)
 
 
@@ -120,3 +150,6 @@ def replace_offload_module(base, name: str, hook: AlignDevicesHook, module):
     )
 
     base.register_module(name, module)
+=======
+        moe_context.get(cls_name)(model, stack, calibrate_all_experts)
+>>>>>>> upstream/main

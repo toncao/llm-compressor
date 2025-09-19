@@ -224,6 +224,28 @@ qwen3_next_mapping = [
     ),
 ]
 
+bailing_moe_v2_mapping = [
+    # For all attention blocks
+    AWQMapping(
+        smooth_layer="re:.*input_layernorm",
+        balance_layers=["re:.*query_key_value"]
+    ),
+    
+    # For all MLP/MoE blocks
+    AWQMapping(
+        smooth_layer="re:.*post_attention_layernorm",
+        balance_layers=[
+            "re:.*gate_proj",
+            "re:.*up_proj",
+        ]
+    ),
+    
+    AWQMapping(
+        smooth_layer="re:.*up_proj$",
+        balance_layers=["re:.*down_proj$"]
+    )
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -251,7 +273,8 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "SeedOssForCausalLM": _default_mappings,
     "Ernie4_5_MoeForCausalLM": _default_mappings,
     "ApertusForCausalLM": apertus_mappings,
-    "Qwen3NextForCausalLM": qwen3_next_mapping
+    "Qwen3NextForCausalLM": qwen3_next_mapping,
+    "BailingMoeV2ForCausalLM": bailing_moe_v2_mapping
     }
 
 
