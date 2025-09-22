@@ -274,7 +274,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Ernie4_5_MoeForCausalLM": _default_mappings,
     "ApertusForCausalLM": apertus_mappings,
     "Qwen3NextForCausalLM": qwen3_next_mapping,
-    "BailingMoeV2ForCausalLM": bailing_moe_v2_mapping
+    "BailingMoeV2ForCausalLM": bailing_moe_v2_mapping,
     }
 
 
