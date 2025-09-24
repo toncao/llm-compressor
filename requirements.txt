@@ -62,6 +62,8 @@ six==1.17.0
 sympy==1.14.0
 tokenizers==0.22.0
 torch==2.8.0
+torchvision==0.23.0
+torchaudio==2.8.0
 tqdm==4.67.1
 transformers==4.56.0
 triton==3.4.0
