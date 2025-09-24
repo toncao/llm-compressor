@@ -144,22 +144,6 @@ _bloom_mappings = [
     # ),
 ]
 
-_smallthinker_mappings = [
-    AWQMapping(
-        "re:.*input_layernorm$",
-        ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
-    ),
-    AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
-    AWQMapping(
-        "re:.*post_attention_layernorm$",
-        ["re:.*block_sparse_moe.experts.*.gate$", "re:.*block_sparse_moe.experts.*.up$"],
-    ),
-    AWQMapping(
-        "re:.*block_sparse_moe.experts.*.up$",
-        ["re:.*block_sparse_moe.experts.*.down$"],
-    ),
-]
-
 _fused_mappings = [
     AWQMapping(
         "re:.*input_layernorm$",
@@ -172,22 +156,6 @@ _fused_mappings = [
     ),
     AWQMapping(
         "re:.*gate_up_proj$", 
-        ["re:.*down_proj$"],
-    ),
-]
-
-apertus_mappings = [
-    AWQMapping(
-        "re:.*attention_layernorm$",
-        ["re:.*q_proj$", "re:.*k_proj$", "re:.*v_proj$"],
-    ),
-    AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
-    AWQMapping(
-        "re:.*feedforward_layernorm$",
-        ["re:.*up_proj$"],
-    ),
-    AWQMapping(
-        "re:.*up_proj$",
         ["re:.*down_proj$"],
     ),
 ]
@@ -268,13 +236,10 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Glm4MoeForCausalLM": _default_mappings,
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
-    "SmallThinkerForCausalLM": _smallthinker_mappings,
-    "GptOssForCausalLM": _default_mappings,
     "Glm4vForConditionalGeneration": _fused_mappings,
     "Glm4vMoeForConditionalGeneration": _default_mappings,
     "SeedOssForCausalLM": _default_mappings,
     "Ernie4_5_MoeForCausalLM": _default_mappings,
-    "ApertusForCausalLM": apertus_mappings,
     "Qwen3NextForCausalLM": qwen3_next_mapping,
     "BailingMoeV2ForCausalLM": bailing_moe_v2_mapping,
     }
