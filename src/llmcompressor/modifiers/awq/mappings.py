@@ -152,7 +152,7 @@ _fused_mappings = [
     AWQMapping("re:.*v_proj$", ["re:.*o_proj$"]),
     AWQMapping(
         "re:.*post_attention_layernorm$",
-        ["re:.*gate_up_proj.*"],
+        ["re:.*gate_up_proj$"],
     ),
     AWQMapping(
         "re:.*gate_up_proj$", 
@@ -232,7 +232,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Qwen2MoeForCausalLM": _moe_default_mappings,
     "Qwen3ForCausalLM": _default_mappings,
     "Qwen3MoeForCausalLM": _moe_default_mappings,
-    "Qwen3VLMoeForConditionalGeneration": _fused_mappings,
+    "Qwen3VLMoeForConditionalGeneration": _default_mappings,
     "Glm4MoeForCausalLM": _default_mappings,
     "Llama4ForConditionalGeneration": _default_mappings,
     "Cohere2VisionForConditionalGeneration": _cohere_mappings,
