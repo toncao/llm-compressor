@@ -214,6 +214,28 @@ bailing_moe_v2_mapping = [
     )
 ]
 
+bailing_moe_linear_v2_mapping = [
+    # Attention layers
+    AWQMapping(
+        "re:.*input_layernorm$",
+        ["re:.*query_key_value$"]
+    ),
+    AWQMapping(
+        "re:.*query_key_value$",
+        ["re:.*dense$", "re:.*g_proj$"]
+    ),
+    
+    # All MLP layers (including MoE experts and shared experts)
+    AWQMapping(
+        "re:.*post_attention_layernorm$",
+        ["re:.*gate_proj$", "re:.*up_proj$"]
+    ),
+    AWQMapping(
+        "re:.*up_proj$",
+        ["re:.*down_proj$"]
+    ),
+]
+
 AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "BloomForCausalLM": _bloom_mappings,
     "CohereForCausalLM": _cohere_mappings,
@@ -242,6 +264,7 @@ AWQ_MAPPING_REGISTRY: Dict[str, list[AWQMapping]] = {
     "Ernie4_5_MoeForCausalLM": _default_mappings,
     "Qwen3NextForCausalLM": qwen3_next_mapping,
     "BailingMoeV2ForCausalLM": bailing_moe_v2_mapping,
+    "BailingMoeLinearV2ForCausalLM": bailing_moe_linear_v2_mapping,
     }
 
 
