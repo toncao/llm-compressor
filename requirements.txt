@@ -46,9 +46,6 @@ fastapi==0.117.1
 fief-client==0.20.0
 filelock==3.19.1
 fla-core==0.3.2
-flash-linear-attention @ git+https://github.com/fla-org/flash-linear-attention.git@c3bd56589033610264532b11f0972c69e4645f6e#egg=flash_linear_attention
-flash_attn==2.8.3
-flashinfer-python @ git+https://github.com/flashinfer-ai/flashinfer.git@3e60597ad324f9e6ea261843daf1de6d2a6f5214#egg=flashinfer_python
 flatbuffers==25.2.10
 frozendict==2.4.6
 frozenlist==1.7.0
@@ -235,8 +232,6 @@ wasabi==0.10.1
 wcwidth==0.2.13
 Werkzeug==3.1.3
 wheel==0.45.1
-xielu @ git+https://github.com/nickjbrowning/XIELU@59d60314edf567ad6b9895a1ff5d7533a14ddc96
-xmltodict==0.14.2
 xxhash==3.5.0
 yarl==1.20.1
 yaspin==3.1.0
