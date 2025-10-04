@@ -15,7 +15,7 @@ backoff==1.11.1
 beautifulsoup4==4.13.4
 binaryornot==0.4.4
 bitsandbytes==0.47.0
--e git+https://github.com/Dao-AILab/causal-conv1d.git@08e5fee24bdc3bebce262e8e44bfed3ff640443c#egg=causal_conv1d
+causal-conv1d @ git+https://github.com/Dao-AILab/causal-conv1d.git@08e5fee24bdc3bebce262e8e44bfed3ff640443c#egg=causal_conv1d
 certifi==2025.8.3
 cffi==1.17.1
 chardet==5.2.0
