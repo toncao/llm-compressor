@@ -215,7 +215,7 @@ torchcodec==0.7.0
 torchinfo==1.8.0
 torchvision==0.23.0
 tqdm==4.67.1
-transformers @ git+https://github.com/huggingface/transformers.git@522b79a346c4a188fd16548a7e0bc0ad15b86e5a
+transformers @ git+https://github.com/huggingface/transformers.git@def9a7ef057b13d04aeeaa150e3ce63afa151d4e#egg=transformers
 triton==3.4.0
 typer==0.16.0
 typer-slim==0.19.2

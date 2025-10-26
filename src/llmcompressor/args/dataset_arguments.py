@@ -193,6 +193,7 @@ class DatasetArguments(CustomDatasetArguments):
     tracing_ignore: List[str] = field(
         default_factory=lambda: [
             "_update_causal_mask",
+            "_update_mamba_mask",
             "create_causal_mask",
             "make_causal_mask",
             "get_causal_mask",
