@@ -62,7 +62,7 @@ class LinearQwen3VLMoeTextSparseMoeBlock(torch.nn.Module):
                 )
 
         next_states = next_states.reshape(batch_size, sequence_length, hidden_dim)
-        return next_states, router_logits
+        return next_states
 
 
 class SequentialQwen3VLMoeTextExperts(torch.nn.ModuleList):
