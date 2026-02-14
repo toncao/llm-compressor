@@ -563,12 +563,22 @@ class AWQModifier(Modifier, QuantizationMixin):
                 ):
                     scales = best_scales.to(module.weight.device)
                     if module in balance_layers:
-                        update_offload_parameter(
-                            module,
-                            "weight",
-                            orig_layer_weights[module].to(module.weight.device)
-                            * scales.view(1, -1),
-                        )
+                        if module in orig_layer_weights:
+                            # Quantized balance layer: restore original weight, then scale
+                            update_offload_parameter(
+                                module,
+                                "weight",
+                                orig_layer_weights[module].to(module.weight.device)
+                                * scales.view(1, -1),
+                            )
+                        else:
+                            # Non-quantized balance layer (e.g. mlp.gate in ignore list):
+                            # just scale the current weight directly
+                            update_offload_parameter(
+                                module,
+                                "weight",
+                                module.weight * scales.view(1, -1),
+                            )
                     elif module == smooth_layer:
                         if module.weight.ndim == 1:
                             update_offload_parameter(
