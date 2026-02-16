@@ -22,6 +22,22 @@ __all__ = [
     "dispatch_for_generation",
 ]
 
+TORCH_INIT_FUNCTIONS = {
+    "uniform_": torch.nn.init.uniform_,
+    "normal_": torch.nn.init.normal_,
+    "constant_": torch.nn.init.constant_,
+    "ones_": torch.nn.init.ones_,
+    "zeros_": torch.nn.init.zeros_,
+    "eye_": torch.nn.init.eye_,
+    "dirac_": torch.nn.init.dirac_,
+    "xavier_uniform_": torch.nn.init.xavier_uniform_,
+    "xavier_normal_": torch.nn.init.xavier_normal_,
+    "kaiming_uniform_": torch.nn.init.kaiming_uniform_,
+    "kaiming_normal_": torch.nn.init.kaiming_normal_,
+    "trunc_normal_": torch.nn.init.trunc_normal_,
+    "orthogonal_": torch.nn.init.orthogonal_,
+    "sparse_": torch.nn.init.sparse_,
+}
 
 @contextlib.contextmanager
 def skip_weights_download(model_class: Type[PreTrainedModel] = AutoModelForCausalLM):
