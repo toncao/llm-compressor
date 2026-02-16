@@ -56,17 +56,18 @@ def update_fused_layer_weight_global_scales(submodule: torch.nn.Module):
         if hasattr(submodule, "qkv_proj"):
             return
 
-        # not traditional attention (TODO: MLA)
-        if not (
-            hasattr(submodule, "q_proj")
-            and hasattr(submodule, "k_proj")
-            and hasattr(submodule, "v_proj")
-        ):
-            return
+        _ATTN_PROJ_NAMES = (
+            "q_proj", "k_proj", "v_proj",
+            "q_a_proj", "q_b_proj", "kv_a_proj_with_mqa", "kv_b_proj",
+        )
 
-        if not _valid_tensor_group_quant(
-            [submodule.q_proj, submodule.k_proj, submodule.v_proj]
-        ):
+        proj_layers = [
+            getattr(submodule, name)
+            for name in _ATTN_PROJ_NAMES
+            if hasattr(submodule, name)
+        ]
+
+        if not proj_layers or not _valid_tensor_group_quant(proj_layers):
             return
 
         with align_modules([submodule.q_proj, submodule.v_proj, submodule.k_proj]):
