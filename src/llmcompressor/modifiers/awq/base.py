@@ -581,10 +581,14 @@ class AWQModifier(Modifier, QuantizationMixin):
                             )
                     elif module == smooth_layer:
                         if module.weight.ndim == 1:
+                            if _is_unit_plus_weight_norm(module):
+                                new_weight = (1.0 + module.weight) / scales - 1.0
+                            else:
+                                new_weight = module.weight.div_(scales)
                             update_offload_parameter(
                                 module,
                                 "weight",
-                                module.weight.div_(scales),
+                                new_weight,
                             )
                         else:
                             # NOTE: edge case when smooth layer number of out_features
@@ -1050,3 +1054,23 @@ def _accumulate_mean(
     new_count = prev_count + num_added
 
     return (prev_sum + sum_added) / new_count, new_count
+
+
+def _is_unit_plus_weight_norm(module: torch.nn.Module) -> bool:
+    """
+    Detect RMSNorm variants whose forward computes ``norm(x) * (1 + weight)``
+    rather than ``norm(x) * weight``.  In these norms the weight is
+    initialized to zeros so that the initial effective gain is 1.
+
+    Known instances:
+      - Qwen3_5MoeRMSNorm
+      - Gemma2RMSNorm / GemmaRMSNorm
+    """
+    cls_name = type(module).__name__
+    # Explicit allowlist — easy to extend as new architectures appear
+    _UNIT_PLUS_WEIGHT_NORMS = {
+        "Qwen3_5MoeRMSNorm",
+        "Qwen3NextRMSNorm",
+        "Gemma3RMSNorm"
+    }
+    return cls_name in _UNIT_PLUS_WEIGHT_NORMS
