@@ -66,17 +66,10 @@ class CalibrateQwen3_5MoeSparseMoeBlock(MoECalibrationModule):
         hidden_states = hidden_states.view(-1, hidden_dim)
 
         # router_logits: (batch * sequence_length, n_experts)
-        router_logits = torch.nn.functional.linear(hidden_states, self.gate.weight)
-
-        routing_weights = torch.nn.functional.softmax(
-            router_logits, dim=-1, dtype=torch.float
-        )
-        routing_weights, selected_experts = torch.topk(
-            routing_weights, self.top_k, dim=-1
-        )
-        routing_weights /= routing_weights.sum(dim=-1, keepdim=True)
-        # we cast back to the input dtype
-        routing_weights = routing_weights.to(hidden_states.dtype)
+        # Delegate to self.gate so that any forward hooks registered on the
+        # Qwen3_5MoeTopKRouter module fire correctly during calibration and
+        # AWQ _run_samples.
+        router_logits, routing_weights, selected_experts = self.gate(hidden_states)
 
         final_hidden_states = torch.zeros(
             (batch_size * sequence_length, hidden_dim),
@@ -123,7 +116,7 @@ class CalibrateQwen3_5MoeSparseMoeBlock(MoECalibrationModule):
         final_hidden_states = final_hidden_states.reshape(
             batch_size, sequence_length, hidden_dim
         )
-        return final_hidden_states, router_logits
+        return final_hidden_states
 
     def restore(self, original: torch.nn.Module) -> torch.nn.Module:
         return original
