@@ -1071,6 +1071,7 @@ def _is_unit_plus_weight_norm(module: torch.nn.Module) -> bool:
     _UNIT_PLUS_WEIGHT_NORMS = {
         "Qwen3_5MoeRMSNorm",
         "Qwen3NextRMSNorm",
-        "Gemma3RMSNorm"
+        "Gemma3RMSNorm",
+        "Step3p5RMSNorm"
     }
     return cls_name in _UNIT_PLUS_WEIGHT_NORMS
