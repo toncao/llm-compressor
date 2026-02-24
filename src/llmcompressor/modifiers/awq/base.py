@@ -1070,6 +1070,7 @@ def _is_unit_plus_weight_norm(module: torch.nn.Module) -> bool:
     # Explicit allowlist — easy to extend as new architectures appear
     _UNIT_PLUS_WEIGHT_NORMS = {
         "Qwen3_5MoeRMSNorm",
+        "Qwen3_5RMSNorm",
         "Qwen3NextRMSNorm",
         "Gemma3RMSNorm",
         "Step3p5RMSNorm"
