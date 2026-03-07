@@ -19,6 +19,7 @@ from .qwen3_next_moe import CalibrationQwen3NextSparseMoeBlock  # noqa: F401
 from .qwen3_5_moe import CalibrateQwen3_5MoeSparseMoeBlock  # noqa: F401
 from .glm_moe_dsa import CalibrateGlmMoeDsaMoE
 from .lfm2_moe import CalibrateLfm2MoeSparseMoeBlock
+from .step3p5moe import CalibrateStep3p5MoEMLP
 # TODO: add granite4
 
 from .fuse import *
