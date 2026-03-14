@@ -18,7 +18,7 @@ from .qwen3_moe import CalibrationQwen3MoeSparseMoeBlock  # noqa: F401
 from .qwen3_vl_moe import CalibrateQwen3VLMoeTextSparseMoeBlock  # noqa: F401
 from .qwen3_next_moe import CalibrationQwen3NextSparseMoeBlock  # noqa: F401
 from .qwen3_5_moe import CalibrateQwen3_5MoeSparseMoeBlock  # noqa: F401
-from .glm_moe_dsa import CalibrateGlmMoeDsaMoE
+from .glm_moe_dsa import CalibrationGlmMoeDsaMoE
 from .lfm2_moe import CalibrateLfm2MoeSparseMoeBlock
 from .step3p5_moe import CalibrateStep3p5MoEMLP
 from .nemotron_h import CalibrationNemotronHMoE
