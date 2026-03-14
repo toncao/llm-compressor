@@ -661,6 +661,9 @@ class AWQModifier(Modifier, QuantizationMixin):
         device = get_execution_device(mapping.parent)
 
         x_mean = self._smooth_activation_means[mapping.smooth_name][0].to(device)
+        x_mean_floor = x_mean[x_mean > 0].min() if (x_mean > 0).any() else 1e-4
+        x_mean = x_mean.clamp(min=x_mean_floor)
+        
         if self.duo_scaling:
             w_mean = self._compute_layer_means(mapping.balance_layers).to(device)
 
@@ -713,7 +716,7 @@ class AWQModifier(Modifier, QuantizationMixin):
                     )
                 else:
                     scales = x_mean.pow(ratio).clamp(min=1e-4).view(-1)
-                scales = scales / (scales.max() * scales.min()).sqrt()
+                scales = scales / scales.median()
                 scales[torch.isinf(scales)] = 1
                 scales[torch.isnan(scales)] = 1
                 _scalesview = scales.view(1, -1).to(device)
